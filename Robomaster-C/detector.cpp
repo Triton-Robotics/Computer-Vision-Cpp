@@ -17,7 +17,7 @@ Detector::Detector() {
 
 }
 
-void Detector::DetectLive(Mat &input) {
+int * Detector::DetectLive(Mat &input) {
     Mat raw, hsv, blue_mask, red_mask, mask, raw_debug, mask_debug, color_mask, mask_results;
     vector<vector<Point>> contours;
     vector<Vec4i> hierarchy;
@@ -28,6 +28,13 @@ void Detector::DetectLive(Mat &input) {
 
     Scalar low_red(0, 0, 200);
     Scalar high_red(255, 255, 255);
+	
+	// camera values
+	// WARNING: NEED TO BE UPDATED WITH ACTUAL VALUES -----------------------------------------------------------------
+	int camera_res[2] = {1280, 720};
+	int camera_fov[2] = {90, 90};
+	int camera_midpoint[2] = {camera_res[0]/2, camera_res[1]/2};
+	// WARNING: NEED TO BE UPDATED WITH ACTUAL VALUES -----------------------------------------------------------------
 
     resize(input, raw, Size(640, 512)); // center is (320, 256)
     cvtColor(raw, hsv, CV_RGB2HSV);
@@ -192,7 +199,13 @@ void Detector::DetectLive(Mat &input) {
 
     // if final_armor not null, then draw result
     if (closest_to_center != DBL_MAX) {
-        // TODO return coordinate of detected result
+        // Side-to-side angle offset
+		float offset_YZ = -1 * ((camera_midpoint[0] - final_armor[0]) / camera_midpoint[0]) * camera_fov[0] / 2;
+
+		// Up-and-down angle offset
+		float offset_XY = ((camera_midpoint[1] - final_armor[1]) / camera_midpoint[1]) * camera_fov[1] / 2
+
+		return {offset_XY, offset_YZ};
     }
 
     input = raw;
