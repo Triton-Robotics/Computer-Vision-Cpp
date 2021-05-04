@@ -76,20 +76,20 @@ vector<Point2f> PotentialArmor::getCorners() {
     return corners;
 }
 
-double* PotentialArmor::getDistance() {
+tuple<double, double> PotentialArmor::getDistance() {
     // get top and bottom width distances for each pair of lights passed in 
     double top_distance = sqrt(pow((light1.getTop().x - light2.getTop().x), 2) + pow((light1.getTop().y - light2.getTop().y), 2));
     double bot_distance = sqrt(pow((light1.getBottom().x - light2.getBottom().x), 2) + pow((light1.getBottom().y - light2.getBottom().y), 2));
-    double arr[2] = { top_distance, bot_distance };
-    return arr;
+    return make_tuple(top_distance, bot_distance);
 }
 
 // new function added 
 bool PotentialArmor::checkProportion() {
     // set up variables - get distances and set up max containers for each
     double max_height = light1.getHeight();
-    double distance1 = getDistance()[0];
-    double distance2 = getDistance()[1];
+    tuple<double, double> distances = getDistance();
+    double distance1 = get<0>(distances);
+    double distance2 = get<1>(distances);
     double max_distance = distance1;
 
     // check up maxes for both calculated distance and width

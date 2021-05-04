@@ -4,6 +4,7 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
+#include <tuple>
 #include "potential_light.h"
 
 class PotentialArmor {
@@ -21,7 +22,7 @@ public:
     bool matchHeight();
     bool matchY();
     bool checkProportion();
-    double* getDistance();
+    std::tuple<double, double> getDistance();
     cv::Point2f getCenter();
     std::vector<cv::Point2f> getCorners();
     ArmorState validate();
