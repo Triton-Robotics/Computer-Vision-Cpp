@@ -3,6 +3,7 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
+#include <tuple>
 
 class Detector {
 public:
@@ -10,7 +11,7 @@ public:
     Detector();
     ~Detector() = default;
 
-    void DetectLive(cv::Mat &input);
+    std::tuple<float, float> DetectLive(cv::Mat &input);
 
 private:
     static cv::Mat* addr;

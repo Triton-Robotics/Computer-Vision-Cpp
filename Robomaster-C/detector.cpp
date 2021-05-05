@@ -17,7 +17,7 @@ Detector::Detector() {
 
 }
 
-int * Detector::DetectLive(Mat &input) {
+tuple<float, float> Detector::DetectLive(Mat &input) {
     Mat raw, hsv, blue_mask, red_mask, mask, raw_debug, mask_debug, color_mask, mask_results;
     vector<vector<Point>> contours;
     vector<Vec4i> hierarchy;
@@ -200,15 +200,17 @@ int * Detector::DetectLive(Mat &input) {
     // if final_armor not null, then draw result
     if (closest_to_center != DBL_MAX) {
         // Side-to-side angle offset
-		float offset_YZ = -1 * ((camera_midpoint[0] - final_armor[0]) / camera_midpoint[0]) * camera_fov[0] / 2;
+		float offset_YZ = -1 * ((camera_midpoint[0] - final_armor.getCenter().x) / camera_midpoint[0]) * camera_fov[0] / 2;
 
 		// Up-and-down angle offset
-		float offset_XY = ((camera_midpoint[1] - final_armor[1]) / camera_midpoint[1]) * camera_fov[1] / 2
+        float offset_XY = ((camera_midpoint[1] - final_armor.getCenter().y) / camera_midpoint[1]) * camera_fov[1] / 2;
 
-		return {offset_XY, offset_YZ};
+        // might want to add input = raw here for debug purposes
+        return make_tuple(offset_XY, offset_YZ);
     }
 
     input = raw;
+    return;
 
 #if DEBUG
 
